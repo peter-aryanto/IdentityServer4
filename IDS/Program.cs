@@ -1,14 +1,15 @@
 using IdentityServer4.Models;
 using IdentityServer4.Test;
+using IDS;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddIdentityServer()
-  .AddInMemoryClients(new List<Client>())
-  .AddInMemoryIdentityResources(new List<IdentityResource>())
-  .AddInMemoryApiResources(new List<ApiResource>())
-  .AddInMemoryApiScopes(new List<ApiScope>())
-  .AddTestUsers(new List<TestUser>())
+  .AddInMemoryClients(Config.Clients)
+  .AddInMemoryIdentityResources(Config.IdentityResources)
+  .AddInMemoryApiResources(Config.ApiResources)
+  .AddInMemoryApiScopes(Config.ApiScopes)
+  .AddTestUsers(Config.Users)
   .AddDeveloperSigningCredential();
 
 var app = builder.Build();
