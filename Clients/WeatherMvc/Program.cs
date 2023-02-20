@@ -27,6 +27,26 @@ builder.Services.AddAuthentication(options => {
     options.ResponseType = "code";
     options.UsePkce = true;
     options.SaveTokens = true;
+
+    options.Events = new Microsoft.AspNetCore.Authentication.OpenIdConnect.OpenIdConnectEvents
+    {
+      OnRedirectToIdentityProvider = context =>
+      {
+        var requestUrl = context.Request.Path.Value ?? string.Empty;
+        // Using action method ending with '2' as a simulation of a mix with an API endpoint.
+        if (requestUrl.EndsWith('2'))
+        {
+          context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+          context.HandleResponse();
+        }
+        // else if (context.ProtocolMessage.RequestType ==
+        //   Microsoft.IdentityModel.Protocols.OpenIdConnect.OpenIdConnectRequestType.Authentication)
+        // {
+        //   context.ProtocolMessage.AcrValues = "idp:azuread";
+        // }
+        return Task.CompletedTask;
+      }
+    };
   });
 
 var app = builder.Build();

@@ -55,6 +55,31 @@ public class HomeController : Controller
       }
     }
 
+    [Authorize]
+    // Using action method ending with '2' as a simulation of a mix with an API endpoint.
+    public async Task<IActionResult> Weather2()
+    {
+      var token = await _tokenService.GetToken("weatherapi.read");
+
+      using var client = new HttpClient();
+      client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(
+        "Bearer",
+        token
+      );
+      var result = await client.GetAsync("https://localhost:5003/WeatherForecast");
+
+      if (result.IsSuccessStatusCode)
+      {
+        var model = await result.Content.ReadAsStringAsync();
+        var data = JsonSerializer.Deserialize<List<WeatherData>>(model);
+        return Ok(data);
+      }
+      else
+      {
+        throw new Exception("Unable to get weather data.");
+      }
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
