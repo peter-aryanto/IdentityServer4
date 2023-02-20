@@ -12,6 +12,23 @@ builder.Services.AddSingleton<ITokenService, TokenService>();
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAuthentication(options => {
+  options.DefaultScheme = "cookie";
+  options.DefaultChallengeScheme = "oidc";
+})
+  .AddCookie("cookie")
+  .AddOpenIdConnect("oidc", options => {
+    var config = builder.Configuration;
+    const string sectionPrefix = "InteractiveClientSettings:";
+    options.Authority = config[sectionPrefix + "AuthorityUrl"];
+    options.ClientId = config[sectionPrefix + "ClientId"];
+    options.ClientSecret = config[sectionPrefix + "ClientSecret"];
+    options.Scope.Add(config[sectionPrefix + "Scopes:0"]);
+    options.ResponseType = "code";
+    options.UsePkce = true;
+    options.SaveTokens = true;
+  });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

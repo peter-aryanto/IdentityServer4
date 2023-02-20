@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using WeatherMvc.Models;
 using System.Text.Json;
 using WeatherMvc.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WeatherMvc.Controllers;
 
@@ -30,6 +31,7 @@ public class HomeController : Controller
         return View();
     }
 
+    [Authorize]
     public async Task<IActionResult> Weather()
     {
       var token = await _tokenService.GetToken("weatherapi.read");

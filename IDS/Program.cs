@@ -12,10 +12,14 @@ builder.Services.AddIdentityServer()
   .AddTestUsers(Config.Users)
   .AddDeveloperSigningCredential();
 
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 app.UseIdentityServer();
+app.UseAuthorization();
 
-app.MapGet("/", () => "Hello World!");
+// app.MapGet("/", () => "Hello World!");
+app.MapDefaultControllerRoute();
 
 app.Run();
