@@ -127,9 +127,9 @@ namespace IDS
           ClientSecrets = {new Secret("CodeSecret".Sha256())},
           AllowedScopes = {"openid", "profile", "weatherapi.read"},
 
-          RedirectUris = {"https://localhost:5001/signin-oidc"},
-          FrontChannelLogoutUri = "https://localhost:5001/signout-oidc",
-          PostLogoutRedirectUris = {"https://localhost:5001/signout-callback-oidc"},
+          RedirectUris = {"https://localhost:5005/signin-oidc"},
+          FrontChannelLogoutUri = "https://localhost:5005/signout-oidc",
+          PostLogoutRedirectUris = {"https://localhost:5005/signout-callback-oidc"},
 
           AllowOfflineAccess = true,
           RequirePkce = true,
