@@ -1,6 +1,15 @@
+using WeatherMvc.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+// builder.Services.AddMemoryCache(); // This is needed if using DI.
+
+builder.Services.Configure<IdentityServerSettings>(
+  builder.Configuration.GetSection(nameof(IdentityServerSettings))
+);
+builder.Services.AddSingleton<ITokenService, TokenService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
